@@ -1,0 +1,103 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<!-- Hero / Bienvenida -->
+<section class="bg-primary text-white text-center py-5 min-vh-100 d-flex align-items-center" style="margin-top: 60px;">
+    <div class="container px-3">
+        <h1 class="display-4">Bienvenido a Ferremas</h1>
+        <p class="lead">Tu ferretería de confianza. Todo lo que necesitas para construir y reparar, en un solo lugar.
+        </p>
+        <a href="{% url 'landing:contact' %}" class="btn btn-light btn-lg mt-3">Contacto</a>
+    </div>
+</section>
+
+<!-- Sobre nosotros -->
+<section class="py-5 min-vh-100 d-flex align-items-center bg-light">
+    <div class="container px-3">
+        <div class="row align-items-center">
+
+            <!-- Imagen (primero en móviles) -->
+            <div class="col-12 col-md-6 text-center mb-4 mb-md-0 order-md-2">
+                <img src="{% static 'landing/images/workers.jpg' %}" alt="Ferremas" class="img-fluid rounded shadow">
+            </div>
+
+            <!-- Texto -->
+            <div class="col-12 col-md-6 order-md-1">
+                <h2 class="mb-4 display-5 text-primary">¿Quiénes somos?</h2>
+                <p class="lead text-secondary">
+                    En <strong>Ferremas</strong> nos especializamos en ofrecer soluciones integrales para tus proyectos
+                    de
+                    construcción, reparación y mantenimiento. Desde herramientas básicas hasta equipos de seguridad y
+                    fijaciones especializadas.
+                </p>
+                <p class="text-muted">
+                    Contamos con un equipo apasionado por la calidad y el servicio. Trabajamos cada día para entregar no
+                    solo productos confiables, sino también asesoría y respaldo a cada cliente que confía en nosotros,
+                    ya sea un profesional o una familia.
+                </p>
+                <p class="text-muted">
+                    Nuestro compromiso es ser tu aliado en cada proyecto. Conoce más sobre nosotros y descubre por qué
+                    Ferremas es tu ferretería de confianza.
+                </p>
+                <a href="#" class="btn btn-primary mt-3">Ver catálogo</a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Mapa de ubicación -->
+<section class="bg-light min-vh-100 d-flex align-items-center">
+    <div class="container px-3">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-primary">¿Dónde estamos?</h2>
+            <p class="text-muted">Ven a visitarnos y descubre todo lo que Ferremas tiene para ofrecerte.</p>
+        </div>
+
+        <div class="rounded overflow-hidden shadow" style="height: 350px;">
+            <div id="map" style="width: 100%; height: 100%;"></div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extrajs %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        console.log("¡Bienvenido de nuevo a Ferremas!");
+    });
+</script>
+
+<script>
+    function initMap() {
+      const location = { lat: -33.0336892, lng: -71.5331841 };
+  
+      const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 16,
+        center: location,
+        restriction: {
+          latLngBounds: {
+            north: -33.0236892,
+            south: -33.0436892,
+            east: -71.5231841,
+            west: -71.5431841,
+          },
+          strictBounds: true,
+        },
+        streetViewControl: false,
+      });
+  
+      new google.maps.Marker({
+        position: location,
+        map: map,
+      });
+    }
+  </script>
+  
+  <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD61I2mz0l-DY9Ui4X8wMevEy7qwcYN2Fs&callback=initMap&loading=async"></script>
+
+{% endblock %}

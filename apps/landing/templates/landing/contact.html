@@ -1,0 +1,198 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Contacto{% endblock %}
+
+{% block extracss %}
+<style>
+    /* Modal overlay */
+    .alert-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.95);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1050;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease;
+    }
+
+    .alert-overlay.show {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    /* Circle animation */
+    .circle-animation {
+        background: white;
+        border-radius: 50%;
+        padding: 2.5rem;
+        animation: popUp 0.6s ease forwards;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        color: #198754;
+        /* bootstrap success green */
+    }
+
+    @keyframes popUp {
+        0% {
+            transform: scale(0.7);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .custom-alert {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background-color: #fee2e2;
+        /* rojo claro */
+        border: 1.5px solid #fca5a5;
+        /* rojo suave */
+        padding: 1rem 1.25rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        color: #b91c1c;
+        /* rojo oscuro */
+        box-shadow: 0 4px 8px rgba(185, 28, 28, 0.15);
+        animation: fadeIn 0.5s ease forwards;
+    }
+
+    .alert-icon {
+        width: 24px;
+        height: 24px;
+        stroke: #b91c1c;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="py-5 min-vh-100 bg-light d-flex align-items-center" style="margin-top: 60px;">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+
+            <!-- Texto y redes -->
+            <div class="col-md-6">
+                <h2 class="text-primary mb-4">Contáctanos</h2>
+                <p class="fs-5 text-secondary">
+                    En <strong>Ferremas</strong>, valoramos el contacto directo con nuestros clientes. Si tienes dudas,
+                    necesitas ayuda o deseas cotizar productos, no dudes en escribirnos o llamarnos.
+                </p>
+                <ul class="list-unstyled text-muted fs-6">
+                    <li class="mb-2">
+                        <i class="bi bi-geo-alt-fill text-primary me-2"></i>
+                        Calle Ficticia 123, Viña del Mar, Chile
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-telephone-fill text-primary me-2"></i>
+                        +56 9 1234 5678
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-envelope-fill text-primary me-2"></i>
+                        contacto@ferremas.cl
+                    </li>
+                </ul>
+                <div class="mt-4 d-flex gap-3">
+                    <a href="#" class="text-primary fs-4"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-primary fs-4"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-primary fs-4"><i class="bi bi-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <!-- Formulario -->
+            <div class="col-md-6">
+                <div class="card shadow border-0">
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-3">¡Envianos un mensaje!</h5>
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Correo electrónico</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Mensaje</label>
+                                <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+                            {% if messages %}
+                            {% for message in messages %}
+                            {% if message.tags == 'error' %}
+                            <div class="custom-alert error-alert mt-3" role="alert">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="alert-icon" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 9v2m0 4h.01M4.93 4.93a10 10 0 1114.14 14.14 10 10 0 01-14.14-14.14z" />
+                                </svg>
+                                <span>{{ message }}</span>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal mensaje éxito -->
+<div id="successOverlay" class="alert-overlay" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="circle-animation">
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor"
+            class="bi bi-check-circle-fill" viewBox="0 0 16 16" aria-hidden="true">
+            <path
+                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.97 11.03a.75.75 0 0 0 1.07.02l3.992-3.992a.75.75 0 1 0-1.06-1.06L7.525 9.477 5.383 7.335a.75.75 0 1 0-1.06 1.06l2.647 2.635z" />
+        </svg>
+        <h4 class="fw-bold">¡Mensaje enviado!</h4>
+    </div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const overlay = document.getElementById("successOverlay");
+        // Si hay mensajes con tag success, mostramos el modal
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'success' %}
+        overlay.classList.add("show");
+        setTimeout(() => {
+            overlay.classList.remove("show");
+        }, 1000);
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+    });
+</script>
+{% endblock %}

@@ -19,3 +19,4 @@ Now, activate the enviroment:
 Install dependecies:
 
 -- Django: "pip install django"
+-- Django-browser-reload: "pip install django-browser-reload"

@@ -1,0 +1,171 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Acerca de{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-primary text-white text-center py-5" style="margin-top: 85px;">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Acerca de Ferremas</h1>
+        <p class="lead">Comprometidos con la calidad, el servicio y la innovación para tus proyectos.</p>
+    </div>
+</section>
+
+<!-- Misión y Visión -->
+<section class="py-5 min-vh-100 d-flex align-items-center bg-light">
+    <div class="container">
+        <div class="row g-5 align-items-center justify-content-center text-center text-md-start">
+
+            <!-- Imagen -->
+            <div class="col-md-6 d-flex justify-content-center">
+                <img src="{% static 'media/images/workers-ferre.jpg' %}" alt="Misión y Visión Ferremas"
+                    class="img-fluid rounded shadow" style="max-height: 450px;">
+            </div>
+
+            <!-- Texto -->
+            <div class="col-md-6">
+                <h2 class="text-primary mb-4">Nuestra Misión</h2>
+                <p class="fs-5 text-secondary">
+                    En <strong>Ferremas</strong>, trabajamos con pasión para ser el respaldo confiable en cada proyecto
+                    de nuestros clientes.
+                    Nuestra misión es ofrecer una amplia gama de productos de calidad, desde herramientas básicas hasta
+                    equipos especializados,
+                    con un enfoque constante en la atención personalizada, eficiencia y confianza.
+                </p>
+                <p class="text-muted">
+                    Nos comprometemos a contribuir al desarrollo de hogares y negocios, brindando soluciones prácticas,
+                    asesoría experta y un servicio humano.
+                </p>
+
+                <h2 class="text-primary mt-5 mb-4">Nuestra Visión</h2>
+                <p class="fs-5 text-secondary">
+                    Aspiramos a ser una ferretería líder e innovadora, reconocida en la región por nuestra excelencia,
+                    responsabilidad social y cercanía con las personas.
+                </p>
+                <p class="text-muted">
+                    En <strong>Ferremas</strong>, visualizamos un futuro donde cada cliente encuentre más que productos:
+                    encuentre confianza, progreso y comunidad.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Valores -->
+<section class="bg-light py-5">
+    <div class="container text-center">
+        <h2 class="text-primary mb-5">Nuestros Valores</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm p-3">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="bi bi-award-fill text-primary fs-1"></i>
+                        </div>
+                        <h5 class="card-title text-primary">Calidad</h5>
+                        <p class="card-text text-secondary">
+                            Nos aseguramos de ofrecer productos y servicios que cumplan con los más altos estándares del
+                            mercado.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm p-3">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="bi bi-hand-thumbs-up-fill text-primary fs-1"></i>
+                        </div>
+                        <h5 class="card-title text-primary">Compromiso</h5>
+                        <p class="card-text text-secondary">
+                            Nos involucramos con cada cliente para brindar una atención cercana, dedicada y orientada a
+                            resultados reales.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm p-3">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="bi bi-lightbulb-fill text-primary fs-1"></i>
+                        </div>
+                        <h5 class="card-title text-primary">Innovación</h5>
+                        <p class="card-text text-secondary">
+                            Evolucionamos constantemente para ofrecer soluciones modernas que se adapten a las nuevas
+                            necesidades del mercado.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Nuestro Equipo -->
+<section class="py-5 bg-white">
+    <div class="container text-center">
+        <h2 class="text-primary mb-5">Nuestro Equipo</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4 justify-content-center">
+            <div class="col">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="pt-4">
+                        <img src="{% static 'media/images/unkown.jpg' %}" class="rounded-circle shadow-sm"
+                            style="width: 130px; height: 130px; object-fit: cover;" alt="{{ miembro.nombre }}">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title mb-1">Unkown</h5>
+                        <p class="card-text text-muted">Unkown</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="pt-4">
+                        <img src="{% static 'media/images/unkown.jpg' %}" class="rounded-circle shadow-sm"
+                            style="width: 130px; height: 130px; object-fit: cover;" alt="{{ miembro.nombre }}">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title mb-1">Unkown</h5>
+                        <p class="card-text text-muted">Unkown</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="pt-4">
+                        <img src="{% static 'media/images/unkown.jpg' %}" class="rounded-circle shadow-sm"
+                            style="width: 130px; height: 130px; object-fit: cover;" alt="{{ miembro.nombre }}">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title mb-1">Unkown</h5>
+                        <p class="card-text text-muted">Unkown</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="pt-4">
+                        <img src="{% static 'media/images/unkown.jpg' %}" class="rounded-circle shadow-sm"
+                            style="width: 130px; height: 130px; object-fit: cover;" alt="{{ miembro.nombre }}">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title mb-1">Unkown</h5>
+                        <p class="card-text text-muted">Unkown</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extrajs %}
+{% endblock %}

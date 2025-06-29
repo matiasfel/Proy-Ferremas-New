@@ -15,8 +15,22 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
+    # Django Admin
     path('admin/', admin.site.urls),
+    
+    # Roots URLs
+    path("",     include(('apps.landing.urls', 'landing'), namespace='landing')),
+    path("core/", include(("apps.core.urls", "core"),       namespace="core")),
 ]
+
+#Only include the browser reload URLs if DEBUG is True
+if settings.DEBUG:
+    urlpatterns += [
+        path("__reload__/", include("django_browser_reload.urls")),
+    ]
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
