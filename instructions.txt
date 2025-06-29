@@ -1,0 +1,21 @@
+-------------------------------------------
+Verify if python is in the system:
+
+-- "python --version"
+
+If python is not installed, install.
+
+-------------------------------------------
+
+How to install the enviroment:
+
+-- In terminal: "python -m venv venv"
+
+Now, activate the enviroment:
+
+-- MacOS Terminal: "source venv/bin/activate"
+-- Windows Terminal: "cd venv/scripts/.activate"
+
+Install dependecies:
+
+-- Django: "pip install django"
