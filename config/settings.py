@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     #Apps
     'apps.core',
     'apps.landing',
+    'apps.authentication',
     #Addons
     'django_browser_reload',
 ]

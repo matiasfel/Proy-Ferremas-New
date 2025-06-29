@@ -100,8 +100,8 @@
 
                     <!-- Botones derecho (sesión) -->
                     <div class="d-flex gap-2 mt-3 mt-lg-0">
-                        <a href="#" class="btn btn-light">Iniciar sesión</a>
-                        <a href="#" class="btn btn-primary">Crear cuenta</a>
+                        <a href="{% url 'authentication:login' %}" class="btn btn-light">Iniciar sesión</a>
+                        <a href="{% url 'authentication:register' %}" class="btn btn-primary">Crear cuenta</a>
                     </div>
                 </div>
             </div>

@@ -24,8 +24,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     # Roots URLs
-    path("",     include(('apps.landing.urls', 'landing'), namespace='landing')),
-    path("core/", include(("apps.core.urls", "core"),       namespace="core")),
+    path("",                include(('apps.landing.urls', 'landing'),               namespace='landing')),
+    path("authentication/", include(('apps.authentication.urls', 'authentication'), namespace='authentication')),
+    path("core/",           include(("apps.core.urls", "core"),                     namespace="core")),
 ]
 
 #Only include the browser reload URLs if DEBUG is True
