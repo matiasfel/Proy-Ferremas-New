@@ -23,3 +23,4 @@ Install dependecies:
 -- Django-Pillow: "pip install Pillow"
 -- Transbank SDK: "pip install transbank-sdk"
 -- Django tweaks: "pip install django-widget-tweaks"
+-- REST Framework: "pip install djangorestframework"

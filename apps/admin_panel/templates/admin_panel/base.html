@@ -203,11 +203,26 @@
                 </a>
                 <a href="{% url 'admin_panel:messages' %}"
                     class="sidebar-link {% if request.resolver_match.url_name == 'messages' %}active{% endif %}">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    <!-- Icono de mensajes (nuevo estilo circular) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="me-2" width="20" height="20" viewBox="0 0 512 512"
+                        fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="32">
+                        <circle cx="256" cy="256" r="208" />
+                        <circle cx="256" cy="256" r="80" />
+                        <path
+                            d="M208 54l8 132M296 186l8-132M208 458l8-132M296 326l8 132M458 208l-132 8M326 296l132 8M54 208l132 8M186 296l-132 8" />
                     </svg>
                     Mensajes
+                </a>
+                <a href="{% url 'admin_panel:restframework' %}"
+                    class="sidebar-link {% if request.resolver_match.url_name == 'restframework' %}active{% endif %}">
+                    <!-- Icono de nube para API -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="me-2" width="20" height="20" viewBox="0 0 512 512"
+                        fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32">
+                        <path d="M400 240c-8.89-89.54-71-144-144-144-69 0-113.44 48.2-128 96-60 6-112 43.59-112 112 
+                     0 66 54 112 120 112h260c55 0 100-27.44 100-88 0-59.82-53-85.76-96-88z" />
+                    </svg>
+                    API Rest Framework
                 </a>
                 <a href="{% url 'admin_panel:config' %}"
                     class="sidebar-link {% if request.resolver_match.url_name == 'config' %}active{% endif %}">

@@ -1,0 +1,149 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}API - Estado{% endblock %}
+
+{% block admin_extracss %}
+<style>
+    .status-indicator {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 12px;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.12);
+    }
+    .status-online {
+        background-color: #198754;
+        box-shadow: 0 0 10px #198754;
+    }
+    .status-offline {
+        background-color: #dc3545;
+        box-shadow: 0 0 10px #dc3545;
+    }
+    .status-warning {
+        background-color: #ffc107;
+        box-shadow: 0 0 10px #ffc107;
+    }
+
+    code {
+        font-size: 0.95rem;
+        background-color: #f1f3f5;
+        padding: 0.3em 0.5em;
+        border-radius: 6px;
+        font-family: 'Fira Mono', Consolas, Monaco, monospace;
+        user-select: all;
+        transition: background-color 0.3s ease;
+    }
+    code:hover {
+        background-color: #e9ecef;
+    }
+
+    pre#api-response {
+        max-height: 400px;
+        overflow-y: auto;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 1rem;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        font-family: 'Fira Mono', Consolas, Monaco, monospace;
+        color: #495057;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        user-select: text;
+    }
+
+    .card-title svg {
+        stroke-width: 28;
+        fill: #0d6efd;
+        transition: fill 0.3s ease;
+    }
+    .card-title svg:hover {
+        fill: #0a58ca;
+    }
+
+    a.api-link {
+        text-decoration: none;
+        font-weight: 600;
+        color: #0d6efd;
+        transition: color 0.2s ease;
+    }
+    a.api-link:hover, a.api-link:focus {
+        color: #0a58ca;
+        text-decoration: underline;
+        outline: none;
+    }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+<main class="col-md-10 ms-sm-auto p-4">
+    <div class="card shadow rounded-4 border-0">
+        <div class="card-body">
+            <h3 class="card-title fw-bold text-primary mb-4 d-flex align-items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="me-2" width="24" height="24" viewBox="0 0 512 512" role="img" aria-label="API Icon" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round" stroke-width="32" fill="none">
+                    <path d="M400 240c-8.89-89.54-71-144-144-144-69 0-113.44 48.2-128 96-60 6-112 43.59-112 112 0 66 54 112 120 112h260c55 0 100-27.44 100-88 0-59.82-53-85.76-96-88z"/>
+                </svg>
+                Estado de la API REST <small class="text-muted fst-italic">(Stock API)</small>
+            </h3>
+
+            <div class="mb-3 d-flex align-items-center" role="status" aria-live="polite" aria-atomic="true">
+                <span class="status-indicator status-online" aria-label="API activa, status online"></span>
+                <span class="fw-semibold fs-5 text-success">Activa</span>
+            </div>
+
+            <dl class="row mb-4">
+                <dt class="col-sm-3 fw-semibold text-muted">Endpoint</dt>
+                <dd class="col-sm-9 d-flex align-items-center flex-wrap">
+                    <code class="me-2">/admin_panel/api_products/</code>
+                    <a href="http://127.0.0.1:8000/admin_panel/api_products/" target="_blank" rel="noopener" class="api-link" aria-label="Abrir endpoint en nueva pestaña">Probar ahora</a>
+                </dd>
+
+                <dt class="col-sm-3 fw-semibold text-muted">Descripción</dt>
+                <dd class="col-sm-9 text-break">
+                    Este endpoint expone el stock actual de todos los productos registrados en la base de datos.
+                    <br>
+                    <small class="text-muted fst-italic">Formato de respuesta: <code>JSON</code></small>
+                </dd>
+            </dl>
+
+            <div class="alert alert-success d-flex align-items-center" role="alert" aria-live="assertive">
+                <svg xmlns="http://www.w3.org/2000/svg" class="ionicon flex-shrink-0 me-2" viewBox="0 0 512 512"
+                    width="24" height="24" fill="currentColor" role="img" aria-label="Success icon">
+                    <path
+                        d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm108.25 138.29l-134.4 160a16 16 0 01-12 5.71h-.27a16 16 0 01-11.89-5.3l-57.6-64a16 16 0 1123.78-21.4l45.29 50.32 122.59-145.91a16 16 0 0124.5 20.58z" />
+                </svg>
+                <div>
+                    La API está respondiendo correctamente.
+                </div>
+            </div>
+
+            <!-- Respuesta en vivo -->
+            <h5 class="mt-5 fw-semibold text-muted">Vista previa de respuesta en vivo</h5>
+            <pre id="api-response" class="bg-light rounded p-3" aria-live="polite" aria-label="Respuesta JSON de la API">Cargando datos...</pre>
+        </div>
+    </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    fetch('/admin_panel/api_products/')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al obtener los datos de la API.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const formattedJson = JSON.stringify(data, null, 2);
+            document.getElementById('api-response').textContent = formattedJson;
+        })
+        .catch(error => {
+            document.getElementById('api-response').textContent =
+                'No se pudo obtener respuesta del endpoint.\n' + error;
+        });
+});
+</script>
+{% endblock %}

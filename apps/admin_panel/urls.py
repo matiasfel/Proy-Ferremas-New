@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views_api import ProductStockAPIView
 
 app_name = "admin_panel"
 
@@ -38,5 +39,10 @@ urlpatterns = [
     path('messages/',  views.admin_messages,  name='messages'),
     path('message/<int:message_id>/delete/', views.admin_message_delete, name='admin_message_delete'),
     
+    #Serializer/apiview
+    path('restframework/', views.admin_restframework, name='restframework'),
+    path('api_products/', ProductStockAPIView.as_view(), name='api_products'),
+    
+    #config
     path('config/',    views.admin_config,    name='config'),
 ]

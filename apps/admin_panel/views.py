@@ -1,17 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from apps.store.models.orders import Order
-from apps.store.models.product import Product
-from apps.users.models import CustomUser
-from django.db.models import Sum
-from .forms import ProductForm
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from decimal import Decimal
-from apps.store.models import Category, Brand
-from .forms import CategoryForm, BrandForm, UserForm, UserCreateForm
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+from apps.store.models import Order, Product, Category, Brand
+from apps.users.models import CustomUser
 from apps.landing.models import ContactMessage
+
+from .forms import ProductForm, CategoryForm, BrandForm, UserForm, UserCreateForm
+from .serializers import ProductStockSerializer
 
 def is_admin(user):
     return user.is_authenticated and user.is_staff
@@ -58,7 +60,21 @@ def admin_order_detail(request, order_id):
 
     subtotal = sum((item.subtotal for item in items), Decimal('0.00'))
 
-    # Construir dirección completa (si es que la quieres mostrar junta)
+    # IVA 19%
+    tax = subtotal * Decimal('0.19')
+
+    # Envío: $3.990 si subtotal <= 50000
+    shipping_fee = Decimal('0.00')
+    shipping_discount = Decimal('0.00')
+    if subtotal <= Decimal('50000'):
+        shipping_fee = Decimal('3990')
+    else:
+        shipping_discount = Decimal('3990')
+
+    # Total calculado
+    total = subtotal + tax + shipping_fee
+
+    # Dirección formateada
     if order.shipping_address:
         shipping_address = f"{order.shipping_address}, {order.shipping_city}, {order.shipping_region}, {order.shipping_zip}"
     else:
@@ -68,6 +84,10 @@ def admin_order_detail(request, order_id):
         'order': order,
         'items': items,
         'subtotal': subtotal,
+        'tax': tax,
+        'shipping_fee': shipping_fee,
+        'shipping_discount': shipping_discount,
+        'total': total,
         'shipping_address': shipping_address,
     }
     return render(request, 'admin_panel/order_detail.html', context)
@@ -356,3 +376,12 @@ def admin_config(request):
     Render the admin settings page.
     """
     return render(request, 'admin_panel/config.html')
+
+
+# VIEW PARA SERIALIZER / API REST FRAMEWORK
+
+def admin_restframework(request):
+    """
+    Render the admin REST framework page.
+    """
+    return render(request, 'admin_panel/restframework.html')
