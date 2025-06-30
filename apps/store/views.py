@@ -11,17 +11,26 @@ from transbank.common.integration_type import IntegrationType
 from transbank.error.transbank_error import TransbankError
 from django.views.decorators.csrf import csrf_exempt
 
+from django.core.paginator import Paginator
+
 def products(request):
     query = request.GET.get('q', '')
     category = request.GET.get('category', '')
+    page_number = request.GET.get('page')
 
-    products = Product.objects.all()
+    products_list = Product.objects.all()
 
     if query:
-        products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
+        products_list = products_list.filter(
+            Q(name__icontains=query) |
+            Q(description__icontains=query)
+        )
 
     if category:
-        products = products.filter(category__name__iexact=category)
+        products_list = products_list.filter(category__name__iexact=category)
+
+    paginator = Paginator(products_list, 12)  # 12 productos por página
+    products = paginator.get_page(page_number)
 
     categories = Product.objects.values_list('category__name', flat=True).distinct()
 

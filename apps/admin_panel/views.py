@@ -96,7 +96,7 @@ def admin_products(request):
     else:
         products_list = products_list.order_by('-id')
 
-    paginator = Paginator(products_list, 15)
+    paginator = Paginator(products_list, 10)
     page_number = request.GET.get('page')
     products = paginator.get_page(page_number)
 

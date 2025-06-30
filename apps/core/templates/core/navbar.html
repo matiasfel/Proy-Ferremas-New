@@ -37,35 +37,59 @@
                                 <div class="col-md-6 col-12 mb-3 mb-md-0">
                                     <a class="dropdown-item" href="{% url 'store:products' %}">Ver todos los
                                         productos</a>
+
                                     <h6 class="dropdown-header text-primary">Herramientas manuales</h6>
-                                    <a class="dropdown-item" href="#">Martillos</a>
-                                    <a class="dropdown-item" href="#">Destornilladores</a>
-                                    <a class="dropdown-item" href="#">Llaves inglesas</a>
+                                    <a class="dropdown-item"
+                                        href="{% url 'store:products' %}?category=Martillos">Martillos</a>
+                                    <a class="dropdown-item"
+                                        href="{% url 'store:products' %}?category=Destornilladores">Destornilladores</a>
+                                    <a class="dropdown-item"
+                                        href="{% url 'store:products' %}?category=Llaves inglesas">Llaves inglesas</a>
+
                                     <div class="dropdown-divider"></div>
                                     <h6 class="dropdown-header text-primary">Herramientas básicas</h6>
-                                    <a class="dropdown-item" href="#">Cajas de herramientas</a>
-                                    <a class="dropdown-item" href="#">Cintas métricas</a>
+                                    <a class="dropdown-item"
+                                        href="{% url 'store:products' %}?category=Cajas de herramientas">Cajas de
+                                        herramientas</a>
+                                    <a class="dropdown-item"
+                                        href="{% url 'store:products' %}?category=Cintas métricas">Cintas métricas</a>
+
                                     <div class="dropdown-divider"></div>
                                     <h6 class="dropdown-header text-primary">Equipos de seguridad</h6>
-                                    <a class="dropdown-item" href="#">Cascos</a>
-                                    <a class="dropdown-item" href="#">Guantes</a>
-                                    <a class="dropdown-item" href="#">Botas de seguridad</a>
+                                    <a class="dropdown-item"
+                                        href="{% url 'store:products' %}?category=Cascos">Cascos</a>
+                                    <a class="dropdown-item"
+                                        href="{% url 'store:products' %}?category=Guantes">Guantes</a>
+                                    <a class="dropdown-item"
+                                        href="{% url 'store:products' %}?category=Botas de seguridad">Botas de
+                                        seguridad</a>
                                 </div>
+
                                 <div class="col-md-6 col-12">
-                                    <h6 class="dropdown-header text-primary" style="margin-top: 32px;">Tornillos
-                                        y anclajes</h6>
-                                    <a class="dropdown-item" href="#">Tornillos</a>
-                                    <a class="dropdown-item" href="#">Clavos</a>
-                                    <a class="dropdown-item" href="#">Anclajes</a>
+                                    <h6 class="dropdown-header text-primary" style="margin-top: 32px;">Tornillos y
+                                        anclajes</h6>
+                                    <a class="dropdown-item"
+                                        href="{% url 'store:products' %}?category=Tornillos">Tornillos</a>
+                                    <a class="dropdown-item"
+                                        href="{% url 'store:products' %}?category=Clavos">Clavos</a>
+                                    <a class="dropdown-item"
+                                        href="{% url 'store:products' %}?category=Anclajes">Anclajes</a>
+
                                     <div class="dropdown-divider"></div>
                                     <h6 class="dropdown-header text-primary">Fijaciones y adhesivos</h6>
-                                    <a class="dropdown-item" href="#">Pegamentos</a>
-                                    <a class="dropdown-item" href="#">Cintas adhesivas</a>
+                                    <a class="dropdown-item"
+                                        href="{% url 'store:products' %}?category=Pegamentos">Pegamentos</a>
+                                    <a class="dropdown-item"
+                                        href="{% url 'store:products' %}?category=Cintas adhesivas">Cintas adhesivas</a>
+
                                     <div class="dropdown-divider"></div>
                                     <h6 class="dropdown-header text-primary">Equipos de medición</h6>
-                                    <a class="dropdown-item" href="#">Calibradores</a>
-                                    <a class="dropdown-item" href="#">Niveles</a>
-                                    <a class="dropdown-item" href="#">Multímetros</a>
+                                    <a class="dropdown-item"
+                                        href="{% url 'store:products' %}?category=Calibradores">Calibradores</a>
+                                    <a class="dropdown-item"
+                                        href="{% url 'store:products' %}?category=Niveles">Niveles</a>
+                                    <a class="dropdown-item"
+                                        href="{% url 'store:products' %}?category=Multímetros">Multímetros</a>
                                 </div>
                             </div>
                         </div>
