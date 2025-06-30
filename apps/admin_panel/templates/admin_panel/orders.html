@@ -14,10 +14,10 @@
         class="form-control form-control-sm">
       <select name="status" class="form-select form-select-sm">
         <option value="">Estado</option>
-        <option value="pending" {% if request.GET.status=='pending' %}selected{% endif %}>Pendiente</option>
-        <option value="paid" {% if request.GET.status=='paid' %}selected{% endif %}>Pagado</option>
-        <option value="cancelled" {% if request.GET.status=='cancelled' %}selected{% endif %}>Cancelado</option>
-        <option value="failed" {% if request.GET.status=='failed' %}selected{% endif %}>Fallido</option>
+        <option value="pending" {% if request.GET.status|default:'' == 'pending' %}selected{% endif %}>Pendiente</option>
+        <option value="paid" {% if request.GET.status|default:'' == 'paid' %}selected{% endif %}>Pagado</option>
+        <option value="cancelled" {% if request.GET.status|default:'' == 'cancelled' %}selected{% endif %}>Cancelado</option>
+        <option value="failed" {% if request.GET.status|default:'' == 'failed' %}selected{% endif %}>Fallido</option>
       </select>
       <button type="submit" class="btn btn-outline-primary btn-sm">Filtrar</button>
     </form>
