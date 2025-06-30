@@ -1,0 +1,302 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load clp_filters %}
+
+{% block title %}Carrito de Compras{% endblock %}
+
+{% block extracss %}
+<style>
+  /* Modal overlay */
+  .alert-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+
+  .alert-overlay.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* Circle animation */
+  .circle-animation {
+    background: white;
+    border-radius: 50%;
+    padding: 2.5rem;
+    animation: popUp 0.6s ease forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    color: #198754;
+    /* bootstrap success green */
+  }
+
+  @keyframes popUp {
+    0% {
+      transform: scale(0.7);
+      opacity: 0;
+    }
+
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  /* Modal overlay para confirmación eliminar */
+  .confirm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    /* fondo semitransparente oscuro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .confirm-overlay.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* Contenido del modal */
+  .confirm-content {
+    background: white;
+    padding: 2rem 2.5rem;
+    border-radius: 1rem;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+
+  .confirm-buttons {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .confirm-buttons button {
+    min-width: 100px;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .btn-confirm {
+    background-color: #dc3545;
+    /* rojo bootstrap */
+    color: white;
+    border: none;
+  }
+
+  .btn-confirm:hover {
+    background-color: #b02a37;
+  }
+
+  .btn-cancel {
+    background-color: #6c757d;
+    /* gris bootstrap */
+    color: white;
+    border: none;
+  }
+
+  .btn-cancel:hover {
+    background-color: #565e64;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 140px; max-width: 900px;">
+  <h2 class="text-primary fw-bold text-center mb-4">Tu Carrito</h2>
+
+  {% if items %}
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light text-center">
+        <tr>
+          <th class="text-start">Producto</th>
+          <th>Precio unitario</th>
+          <th>Cantidad</th>
+          <th>Subtotal</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td class="d-flex align-items-center">
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" width="60" class="me-3 rounded">
+            {{ item.product.name }}
+          </td>
+          <td class="text-center">{{ item.product.price|clp }}</td>
+          <td class="text-center">
+            <form method="post" action="{% url 'store:update_cart_item' item.id %}"
+              class="d-flex justify-content-center align-items-center gap-2">
+              {% csrf_token %}
+              <input type="number" name="quantity" min="1" value="{{ item.quantity }}" max="{{ item.product.stock }}"
+                class="form-control form-control-sm" required style="width: 70px;">
+              <button type="submit" class="btn btn-sm btn-outline-primary">Actualizar</button>
+            </form>
+          </td>
+          <td class="fw-bold text-center">{{ item.get_total_price|clp}}</td>
+          <td class="text-center">
+            <form method="post" action="{% url 'store:remove_cart_item' item.id %}" class="remove-item-form">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar del carrito">&times;</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-end mt-4">
+    <div class="border rounded p-3 bg-light" style="min-width: 280px;">
+      <p class="mb-2 d-flex justify-content-between">
+        <span class="text-muted">Subtotal:</span>
+        <strong>{{ subtotal|clp }}</strong>
+      </p>
+      <p class="mb-2 d-flex justify-content-between">
+        <span class="text-muted">IVA (19%):</span>
+        <strong>{{ tax|clp }}</strong>
+      </p>
+      <p class="mb-2 d-flex justify-content-between">
+        <span class="text-muted">Envío:</span>
+        {% if shipping > 0 %}
+        <strong>{{ shipping|clp }}</strong>
+        {% else %}
+        <strong class="text-success">Gratis</strong>
+        {% endif %}
+      </p>
+      <hr class="my-2">
+      <p class="h5 d-flex justify-content-between">
+        <span>Total:</span>
+        <span class="text-success">{{ total|clp }}</span>
+      </p>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end gap-3 mt-4">
+    <a href="{% url 'store:products' %}" class="btn btn-primary">Seguir comprando</a>
+    <a href="{% url 'store:start_payment' %}" class="btn btn-success">Ir a pagar</a>
+  </div>
+
+  {% else %}
+  <p class="text-center fst-italic text-muted mt-4">Tu carrito está vacío.</p>
+  <div class="d-flex justify-content-center mt-3">
+    <a href="{% url 'store:products' %}" class="btn btn-primary">Ver productos</a>
+  </div>
+  {% endif %}
+
+  <!-- Modal de éxito al agregar producto -->
+  <div id="successOverlay" class="alert-overlay" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="circle-animation">
+      <img src="{% static 'images/svg/buy-cart.svg' %}" style="width: 80px; height: 80px;">
+      <h4 class="fw-bold">¡Producto agregado!</h4>
+    </div>
+  </div>
+
+  <!-- Modal confirmación eliminar -->
+  <div id="confirmDeleteModal" class="confirm-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle"
+    aria-describedby="modalDesc" tabindex="-1">
+    <div class="confirm-content">
+      <h4 id="modalTitle" class="fw-bold text-danger">¿Eliminar producto?</h4>
+      <p id="modalDesc">¿Estás seguro que deseas eliminar este producto del carrito?</p>
+      <div class="confirm-buttons">
+        <button id="confirmBtn" class="btn-confirm">Eliminar</button>
+        <button id="cancelBtn" class="btn-cancel">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const overlay = document.getElementById("successOverlay");
+    {% if messages %}
+    {% for message in messages %}
+    {% if 'success' in message.tags and 'added' in message.tags %}
+    overlay.classList.add("show");
+    setTimeout(() => {
+      overlay.classList.remove("show");
+    }, 1000);
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Modal confirmación eliminar
+    const modal = document.getElementById("confirmDeleteModal");
+    const confirmBtn = document.getElementById("confirmBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
+    let formToSubmit = null;
+
+    // Capturar todos los formularios de eliminar
+    document.querySelectorAll(".remove-item-form").forEach(form => {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault(); // evitar envío inmediato
+        formToSubmit = this;
+        modal.classList.add("show");
+        modal.focus();
+      });
+    });
+
+    // Confirmar eliminar
+    confirmBtn.addEventListener("click", function () {
+      if (formToSubmit) {
+        formToSubmit.submit();
+      }
+    });
+
+    // Cancelar eliminar
+    cancelBtn.addEventListener("click", function () {
+      modal.classList.remove("show");
+      formToSubmit = null;
+    });
+
+    // Cerrar modal si clic fuera del contenido
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) {
+        modal.classList.remove("show");
+        formToSubmit = null;
+      }
+    });
+
+    // Cerrar modal con Escape
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("show")) {
+        modal.classList.remove("show");
+        formToSubmit = null;
+      }
+    });
+  });
+</script>
+{% endblock %}

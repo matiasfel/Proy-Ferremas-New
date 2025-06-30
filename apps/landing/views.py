@@ -3,6 +3,11 @@ from django.contrib import messages
 from .models import ContactMessage
 
 def index(request):
+    if request.user.is_authenticated:
+        if request.user.role in ['ADMINISTRADOR', 'VENDEDOR', 'BODEGUERO', 'CONTADOR']:
+            if not request.session.get('admin_redirected', False):
+                request.session['admin_redirected'] = True
+                return redirect('admin_panel:dashboard')
     return render(request, 'landing/index.html')
 
 def about(request):

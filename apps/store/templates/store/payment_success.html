@@ -1,0 +1,121 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% load clp_filters %}
+
+{% block extracss %}
+<style>
+    body {
+        background: linear-gradient(to right, #f8fafc, #e2e8f0);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .receipt-container {
+        animation: fadeIn 0.5s ease-out forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .icon-check {
+        color: #22c55e;
+    }
+
+    .table th,
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table thead {
+        background-color: #f1f5f9;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center min-vh-100" style="padding-top: 100px; padding-bottom: 80px;">
+    <div class="receipt-container bg-white rounded-4 shadow-lg p-5 border border-success-subtle" style="max-width: 800px; width: 100%;">
+        <div class="text-center mb-5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="icon-check" d="M5 13l4 4L19 7" />
+            </svg>
+            <h1 class="display-5 fw-bold text-dark mt-3">¡Pago exitoso!</h1>
+            <p class="text-muted fs-5">Gracias por tu compra. Aquí tienes el detalle de tu pedido.</p>
+        </div>
+
+        {% if order and order.items.exists %}
+        <div class="mb-4">
+            <h5 class="fw-bold">Boleta electrónica - Pedido #{{ order.id }}</h5>
+            <table class="table table-hover mt-3">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>SKU</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-end">Precio unitario</th>
+                        <th class="text-end">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                    <tr>
+                        <td>{{ item.product_name }}</td>
+                        <td>{{ item.sku }}</td>
+                        <td class="text-center">{{ item.quantity }}</td>
+                        <td class="text-end">{{ item.price|clp }}</td>
+                        <td class="text-end">{{ item.subtotal|clp }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="mt-4">
+                <div class="d-flex justify-content-between border-top pt-3">
+                    <span class="fw-semibold">Subtotal:</span>
+                    <span>{{ subtotal|clp }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="fw-semibold">IVA (19%):</span>
+                    <span>{{ tax|clp }}</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="fw-semibold">Envío:</span>
+                    <span>{% if shipping == 0 %}Gratis{% else %}{{ shipping|clp }}{% endif %}</span>
+                </div>
+
+                {% if discount and discount > 0 %}
+                <div class="alert alert-success py-2 px-3 mt-3 mb-2 small rounded-pill text-center" role="alert">
+                    ¡Descuento aplicado por compras sobre $50.000!
+                </div>
+                <div class="d-flex justify-content-between text-success">
+                    <span class="fw-semibold">Descuento aplicado:</span>
+                    <span>- {{ discount|clp }}</span>
+                </div>
+                {% endif %}
+
+                <div class="d-flex justify-content-between fs-5 border-top pt-3 mt-3">
+                    <strong>Total pagado:</strong>
+                    <strong>{{ order.total|clp }}</strong>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="text-center mt-5">
+            <a href="{% url 'store:products' %}" class="btn btn-success btn-lg rounded-pill px-5">
+                Seguir comprando
+            </a>
+            {% if order %}
+            <a href="{% url 'store:detail' order.id %}" class="btn btn-outline-primary btn-lg rounded-pill px-5 ms-2">
+                Ver detalle del pedido
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

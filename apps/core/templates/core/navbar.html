@@ -1,0 +1,121 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg border-bottom fixed-top bg-body-secondary">
+    <div class="container">
+        <!-- Logo -->
+        <a class="navbar-brand" href="{% url 'landing:index' %}">
+            <img src="{% static 'images/icon/logo-transparent.png' %}" alt="Logo" style="max-height: 60px;">
+        </a>
+
+        <!-- Botón hamburguesa -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Contenido colapsable -->
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <!-- Menú izquierdo -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'landing:index' %}">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'landing:about' %}">Acerca de</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'landing:contact' %}">Contactanos</a>
+                </li>
+                <!-- Mega Dropdown -->
+                <li class="nav-item dropdown position-static">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Productos
+                    </a>
+                    <div class="dropdown-menu w-100 mt-0 border-0 shadow-lg">
+                        <div class="container">
+                            <div class="row py-4">
+                                <div class="col-md-6 col-12 mb-3 mb-md-0">
+                                    <a class="dropdown-item" href="{% url 'store:products' %}">Ver todos los
+                                        productos</a>
+                                    <h6 class="dropdown-header text-primary">Herramientas manuales</h6>
+                                    <a class="dropdown-item" href="#">Martillos</a>
+                                    <a class="dropdown-item" href="#">Destornilladores</a>
+                                    <a class="dropdown-item" href="#">Llaves inglesas</a>
+                                    <div class="dropdown-divider"></div>
+                                    <h6 class="dropdown-header text-primary">Herramientas básicas</h6>
+                                    <a class="dropdown-item" href="#">Cajas de herramientas</a>
+                                    <a class="dropdown-item" href="#">Cintas métricas</a>
+                                    <div class="dropdown-divider"></div>
+                                    <h6 class="dropdown-header text-primary">Equipos de seguridad</h6>
+                                    <a class="dropdown-item" href="#">Cascos</a>
+                                    <a class="dropdown-item" href="#">Guantes</a>
+                                    <a class="dropdown-item" href="#">Botas de seguridad</a>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <h6 class="dropdown-header text-primary" style="margin-top: 32px;">Tornillos
+                                        y anclajes</h6>
+                                    <a class="dropdown-item" href="#">Tornillos</a>
+                                    <a class="dropdown-item" href="#">Clavos</a>
+                                    <a class="dropdown-item" href="#">Anclajes</a>
+                                    <div class="dropdown-divider"></div>
+                                    <h6 class="dropdown-header text-primary">Fijaciones y adhesivos</h6>
+                                    <a class="dropdown-item" href="#">Pegamentos</a>
+                                    <a class="dropdown-item" href="#">Cintas adhesivas</a>
+                                    <div class="dropdown-divider"></div>
+                                    <h6 class="dropdown-header text-primary">Equipos de medición</h6>
+                                    <a class="dropdown-item" href="#">Calibradores</a>
+                                    <a class="dropdown-item" href="#">Niveles</a>
+                                    <a class="dropdown-item" href="#">Multímetros</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+            <!-- Botones derecho (sesión + carrito) -->
+            <div class="d-flex gap-3 align-items-center mt-3 mt-lg-0">
+                {% if user.is_authenticated %}
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown"
+                        data-bs-toggle="dropdown" aria-expanded="false" style="color: #6c757d;">
+                        Hola, {{ user.username }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="{% url 'users:profile' %}">Mi perfil</a></li>
+                        <li><a class="dropdown-item" href="{% url 'users:orders_history' %}">Ver pedidos</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'authentication:logout' %}">Cerrar
+                                sesión</a></li>
+                    </ul>
+                </div>
+
+                <!-- Carrito -->
+                <a href="{% url 'store:cart' %}" class="position-relative text-decoration-none" title="Ver carrito">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#0d6efd" class="bi bi-cart"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M0 1.5A.5.5 0 0 1 .5 1h1a.5.5 0 0 1 .485.379L2.89 5H14.5a.5.5 0 0 1 .49.598l-1.5 7A.5.5 0 0 1 13 13H4a.5.5 0 0 1-.491-.408L1.01 2H.5a.5.5 0 0 1-.5-.5zm3.14 4l1.25 5h7.22l1.25-5H3.14z" />
+                        <circle cx="6" cy="14" r="1" />
+                        <circle cx="12" cy="14" r="1" />
+                    </svg>
+
+                    {% if cart_item_count and cart_item_count > 0 %}
+                    <span class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-pill"
+                        style="font-size: 0.65rem; padding: 0.35em 0.55em;">
+                        {{ cart_item_count }}
+                    </span>
+                    {% endif %}
+                </a>
+
+                {% else %}
+                <a href="{% url 'authentication:login' %}" class="btn btn-link text-muted text-decoration-none">Iniciar
+                    sesión</a>
+                <a href="{% url 'authentication:register' %}" class="btn btn-primary">Crear cuenta</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>

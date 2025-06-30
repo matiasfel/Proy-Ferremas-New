@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Editar perfil{% endblock %}
+
+{% block content %}
+<div class="container min-vh-100 d-flex justify-content-center align-items-center" style="padding-top: 140px; padding-bottom: 60px;">
+  <div class="card shadow-lg border-0 rounded-4 p-4 w-100" style="max-width: 600px;">
+    
+    <h4 class="mb-4 text-primary fw-semibold">Editar perfil</h4>
+
+    <form method="POST" class="needs-validation" novalidate>
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label for="first_name" class="form-label">Nombre</label>
+        <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}" class="form-control" placeholder="Tu nombre">
+      </div>
+
+      <div class="mb-3">
+        <label for="last_name" class="form-label">Apellido</label>
+        <input type="text" name="last_name" id="last_name" value="{{ user.last_name }}" class="form-control" placeholder="Tu apellido">
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Correo electrónico</label>
+        <input type="email" name="email" id="email" value="{{ user.email }}" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="phone" class="form-label">Teléfono</label>
+        <input type="text" name="phone" id="phone" value="{{ user.phone }}" class="form-control" placeholder="Ej: +56 9 1234 5678">
+      </div>
+
+      <div class="mb-3">
+        <label for="address" class="form-label">Dirección</label>
+        <input type="text" name="address" id="address" value="{{ user.address }}" class="form-control" placeholder="Ej: Av. Siempre Viva 123">
+      </div>
+
+      <div class="d-flex justify-content-between mt-4">
+        <a href="{% url 'users:profile' %}" class="btn btn-outline-secondary rounded-pill px-4">← Cancelar</a>
+        <button type="submit" class="btn btn-primary rounded-pill px-4">Guardar cambios</button>
+      </div>
+    </form>
+
+  </div>
+</div>
+{% endblock %}

@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 
     <style>
+        * {
+            overscroll-behavior: none;
+        }
+
         body {
             background-color:
                 transparent;
@@ -24,134 +28,15 @@
 
 <body>
     <header class="bg-body-secondary">
-        <nav class="navbar navbar-expand-lg border-bottom fixed-top bg-body-secondary">
-            <div class="container">
-                <!-- Logo -->
-                <a class="navbar-brand" href="{% url 'landing:index' %}">
-                    <img src="{% static 'media/icon/logo-transparent.png' %}" alt="Logo" style="max-height: 60px;">
-                </a>
-
-                <!-- Botón hamburguesa -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <!-- Contenido colapsable -->
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <!-- Menú izquierdo -->
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="{% url 'landing:index' %}">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'landing:about' %}">Acerca de</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'landing:contact' %}">Contactanos</a>
-                        </li>
-                        <!-- Mega Dropdown -->
-                        <li class="nav-item dropdown position-static">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                Productos
-                            </a>
-                            <div class="dropdown-menu w-100 mt-0 border-0 shadow-lg">
-                                <div class="container">
-                                    <div class="row py-4">
-                                        <div class="col-md-6 col-12 mb-3 mb-md-0">
-                                            <a class="dropdown-item" href="#">Ver todos los productos</a>
-                                            <h6 class="dropdown-header text-primary">Herramientas manuales</h6>
-                                            <a class="dropdown-item" href="#">Martillos</a>
-                                            <a class="dropdown-item" href="#">Destornilladores</a>
-                                            <a class="dropdown-item" href="#">Llaves inglesas</a>
-                                            <div class="dropdown-divider"></div>
-                                            <h6 class="dropdown-header text-primary">Herramientas básicas</h6>
-                                            <a class="dropdown-item" href="#">Cajas de herramientas</a>
-                                            <a class="dropdown-item" href="#">Cintas métricas</a>
-                                            <div class="dropdown-divider"></div>
-                                            <h6 class="dropdown-header text-primary">Equipos de seguridad</h6>
-                                            <a class="dropdown-item" href="#">Cascos</a>
-                                            <a class="dropdown-item" href="#">Guantes</a>
-                                            <a class="dropdown-item" href="#">Botas de seguridad</a>
-                                        </div>
-                                        <div class="col-md-6 col-12">
-                                            <h6 class="dropdown-header text-primary" style="margin-top: 32px;">Tornillos
-                                                y anclajes</h6>
-                                            <a class="dropdown-item" href="#">Tornillos</a>
-                                            <a class="dropdown-item" href="#">Clavos</a>
-                                            <a class="dropdown-item" href="#">Anclajes</a>
-                                            <div class="dropdown-divider"></div>
-                                            <h6 class="dropdown-header text-primary">Fijaciones y adhesivos</h6>
-                                            <a class="dropdown-item" href="#">Pegamentos</a>
-                                            <a class="dropdown-item" href="#">Cintas adhesivas</a>
-                                            <div class="dropdown-divider"></div>
-                                            <h6 class="dropdown-header text-primary">Equipos de medición</h6>
-                                            <a class="dropdown-item" href="#">Calibradores</a>
-                                            <a class="dropdown-item" href="#">Niveles</a>
-                                            <a class="dropdown-item" href="#">Multímetros</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-
-                    <!-- Botones derecho (sesión) -->
-                    <div class="d-flex gap-2 mt-3 mt-lg-0">
-                        <a href="{% url 'authentication:login' %}" class="btn btn-light">Iniciar sesión</a>
-                        <a href="{% url 'authentication:register' %}" class="btn btn-primary">Crear cuenta</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        {% include 'core/navbar.html' %}
     </header>
-    <main>
+    <main class="d-flex flex-column min-vh-100">
         {% block content %}
 
         {% endblock %}
     </main>
     <footer class="bg-body-secondary text-light pt-5 pb-4">
-        <div class="container">
-            <div class="row">
-
-                <!-- Columna 1: Logo + descripción -->
-                <div class="col-md-4 mb-4">
-                    <img src="{% static 'media/icon/logo-transparent.png' %}" alt="Logo" style="max-height: 60px;">
-                    <p class="mt-3 text-muted">Tu ferretería de confianza. Productos de calidad, herramientas confiables
-                        y atención personalizada.</p>
-                </div>
-
-                <!-- Columna 2: Enlaces -->
-                <div class="col-md-4 mb-4">
-                    <h5 class="text-black mb-3">Enlaces rápidos</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="{% url 'landing:index' %}" class="text-muted text-decoration-none">Inicio</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">Productos</a></li>
-                        <li><a href="{% url 'landing:about' %}" class="text-muted text-decoration-none">Acerca de</a></li>
-                        <li><a href="{% url 'landing:contact' %}" class="text-muted text-decoration-none">Contacto</a></li>
-                    </ul>
-                </div>
-
-                <!-- Columna 3: Contacto -->
-                <div class="col-md-4 mb-4">
-                    <h5 class="text-black mb-3">Contacto</h5>
-                    <p class="text-muted mb-1"><i class="bi bi-envelope-fill me-2"></i> contacto@ferremas.cl</p>
-                    <p class="text-muted mb-1"><i class="bi bi-phone-fill me-2"></i> +56 9 1234 5678</p>
-                    <p class="text-muted"><i class="bi bi-geo-alt-fill me-2"></i> Santiago, Chile</p>
-                </div>
-
-            </div>
-
-            <!-- Línea divisoria -->
-            <hr class="border-secondary">
-
-            <!-- Copyright -->
-            <div class="text-center text-muted">
-                &copy; {{ now.year }} Ferremas. Todos los derechos reservados.
-            </div>
-        </div>
+        {% include 'core/footer.html' %}
     </footer>
 
     <!-- Bootstrap JS from 'static/js' -->

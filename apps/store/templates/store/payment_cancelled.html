@@ -1,0 +1,36 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block extracss %}
+<style>
+  body {
+    background: var(--bs-light); /* usa color light de bootstrap */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  .payment-container {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center min-vh-100 px-3">
+  <div class="payment-container bg-white rounded-4 shadow p-5 text-center border border-secondary" style="max-width: 480px; width: 100%;">
+    <h1 class="display-5 fw-bold text-primary mb-4">Pago Cancelado</h1>
+    <p class="text-secondary fs-5 mb-5">
+      El proceso de pago fue cancelado. Si fue un error, puedes intentarlo nuevamente sin problema.
+    </p>
+    <a href="{% url 'store:cart' %}" class="btn btn-primary btn-lg rounded-pill px-5">
+      Volver al carrito
+    </a>
+  </div>
+</div>
+{% endblock %}

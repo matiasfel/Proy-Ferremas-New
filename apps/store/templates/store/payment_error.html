@@ -1,0 +1,60 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block extracss %}
+<style>
+  body {
+    background: linear-gradient(to right, #fef2f2, #fde8e8);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .error-container {
+    animation: fadeIn 0.5s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .icon-error {
+    color: #dc2626;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center min-vh-100 px-3">
+  <div class="error-container bg-white rounded-4 shadow-lg p-5 text-center border border-danger-subtle" style="max-width: 600px; width: 100%;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="icon-error" d="M12 9v2m0 4h.01M12 5a7 7 0 100 14 7 7 0 000-14z" />
+    </svg>
+    <h1 class="display-5 fw-bold text-dark mt-4 mb-3">Ocurrió un error</h1>
+    <p class="text-muted fs-5 mb-4">
+      Hubo un problema al procesar tu pago. Esto puede deberse a un error en la conexión, una tarjeta no válida, o una interrupción del servicio.
+    </p>
+
+    <div class="mb-4 text-start">
+      <h5 class="fw-semibold mb-2">¿Qué puedes hacer?</h5>
+      <ul class="list-unstyled text-muted">
+        <li>✔️ Verifica los datos de tu tarjeta.</li>
+        <li>✔️ Intenta realizar el pago nuevamente.</li>
+        <li>✔️ Si el problema persiste, contacta a soporte o prueba con otro método de pago.</li>
+      </ul>
+    </div>
+
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{% url 'store:cart' %}" class="btn btn-outline-danger btn-lg rounded-pill px-4">
+        Volver al carrito
+      </a>
+      <a href="{% url 'store:start_payment' %}" class="btn btn-danger btn-lg rounded-pill px-4">
+        Reintentar pago
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

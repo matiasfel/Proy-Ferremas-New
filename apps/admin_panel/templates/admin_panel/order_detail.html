@@ -1,0 +1,88 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+{% load clp_filters %}
+
+{% block title %}Detalle de Orden{% endblock %}
+
+{% block admin_extracss %}
+<style>
+  .card-header {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+  .order-status {
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+  }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+<main class="col-md-10 ms-sm-auto p-0">
+  <div class="container mt-5">
+    <h2 class="mb-4 text-primary fw-bold">Detalle de la Orden</h2>
+
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header">Información del Cliente</div>
+      <div class="card-body">
+        <p><strong>Nombre:</strong> {{ order.user.username }}</p>
+        <p><strong>Email:</strong> {{ order.user.email }}</p>
+        <p><strong>Fecha:</strong> {{ order.created_at|date:"d/m/Y H:i" }}</p>
+        <p><strong>Estado:</strong>
+          <span class="badge bg-{{ order.status|yesno:'success,danger,secondary' }}">
+            {{ order.get_status_display }}
+          </span>
+        </p>
+      </div>
+    </div>
+
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header">Dirección de Envío</div>
+      <div class="card-body">
+        {% if shipping_address %}
+          <p>{{ shipping_address }}</p>
+        {% else %}
+          <p>No se ha registrado una dirección de envío para este pedido.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header">Productos</div>
+      <div class="card-body table-responsive">
+        <table class="table align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Precio unitario</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in items %}
+            <tr>
+              <td>{{ item.product_name }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.price|clp }}</td>
+              <td>{{ item.subtotal|clp }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="text-end">
+      <h5 class="fw-bold">Subtotal: <span>{{ subtotal|clp }}</span></h5>
+      <h5 class="fw-bold">Total pagado: <span class="text-success">{{ order.total|clp }}</span></h5>
+    </div>
+
+    <div class="mt-4 d-flex justify-content-end">
+      <a href="{% url 'admin_panel:orders' %}" class="btn btn-outline-secondary">Volver a pedidos</a>
+    </div>
+  </div>
+</main>
+{% endblock %}

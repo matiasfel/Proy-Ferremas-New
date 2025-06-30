@@ -1,0 +1,104 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load clp_filters %}
+
+{% block title %}Detalle del Pedido #{{ order.id }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center min-vh-100 py-5"
+  style="background-color: #f8f9fa; margin-top: 40px;">
+  <div class="container" style="max-width: 900px;">
+    <div class="card shadow-sm border-0 rounded-4 p-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="text-primary fw-semibold mb-0">Pedido #{{ order.id }}</h4>
+        <span class="badge 
+          {% if order.status == 'pending' %} bg-warning text-dark
+          {% elif order.status == 'paid' %} bg-success
+          {% elif order.status == 'cancelled' %} bg-danger
+          {% else %} bg-secondary
+          {% endif %}
+        ">
+          {{ order.get_status_display }}
+        </span>
+      </div>
+
+      <div class="mb-3">
+        <p class="mb-1 text-muted">Fecha del pedido:</p>
+        <p class="fw-semibold">{{ order.created_at|date:"d \d\e F \d\e Y" }}</p>
+      </div>
+
+      <hr>
+
+      <h5 class="mb-3 fw-semibold">Productos:</h5>
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Producto</th>
+              <th class="text-center">Cantidad</th>
+              <th class="text-end">Precio unitario</th>
+              <th class="text-end">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in items %}
+            <tr>
+              <td>
+                <div class="fw-semibold">{{ item.product_name }}</div>
+                <div class="text-muted small mt-1" style="font-size: 13px;">
+                  SKU: {{ item.sku }}
+                </div>
+              </td>
+              <td class="text-center">{{ item.quantity }}</td>
+              <td class="text-end">{{ item.price|clp }}</td>
+              <td class="text-end">{{ item.subtotal|clp }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <hr>
+
+      <div class="mt-4">
+        <div class="d-flex justify-content-between">
+          <span class="fw-semibold">Subtotal:</span>
+          <span>{{ subtotal|clp }}</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <span class="fw-semibold">IVA (19%):</span>
+          <span>{{ tax|clp }}</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <span class="fw-semibold">Envío:</span>
+          <span>{% if shipping == 0 %}Gratis{% else %}{{ shipping|clp }}{% endif %}</span>
+        </div>
+        {% if discount %}
+        <div class="d-flex justify-content-between text-success">
+          <span class="fw-semibold">Descuento:</span>
+          <span>- {{ discount|clp }}</span>
+        </div>
+        {% endif %}
+        <div class="d-flex justify-content-between border-top pt-3 mt-2 fs-5">
+          <strong>Total pagado:</strong>
+          <strong>{{ order.total|clp }}</strong>
+        </div>
+      </div>
+
+      {% if order.status == 'pending' and payment_url %}
+      <div class="text-end mb-4">
+        <a href="{{ payment_url }}" class="btn btn-primary rounded-pill px-4">
+          Terminar pago
+        </a>
+      </div>
+      {% endif %}
+
+      <div class="text-end mt-4">
+        <a href="{% url 'users:profile' %}" class="btn btn-outline-secondary rounded-pill px-4">
+          ← Volver a perfil
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

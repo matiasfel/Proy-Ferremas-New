@@ -1,0 +1,130 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load clp_filters %}
+
+{% block title %}Productos{% endblock %}
+
+{% block extracss %}
+<style>
+    .product-card {
+        transition: transform 0.2s ease-in-out;
+        border-radius: 0.75rem;
+        box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+        border: none;
+    }
+
+    .product-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 4px 12px rgb(0 0 0 / 0.15);
+    }
+
+    .product-image {
+        height: 200px;
+        object-fit: contain;
+        background-color: #f9fafb;
+        padding: 12px;
+        border-radius: 0.75rem 0.75rem 0 0;
+    }
+
+    /* Minimalista filtro */
+    form input[type="text"],
+    form select {
+        border-radius: 1rem;
+        border: 1.5px solid #d1d5db; /* gris claro */
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+        background-color: #fff;
+        color: #374151;
+    }
+
+    form input[type="text"]:focus,
+    form select:focus {
+        outline: none;
+        border-color: #2563eb; /* azul claro */
+        box-shadow: 0 0 5px rgba(37, 99, 235, 0.5);
+    }
+
+    form button {
+        border-radius: 1rem;
+        padding: 0.5rem 1.8rem;
+        font-weight: 600;
+        font-size: 1rem;
+        background-color: #2563eb;
+        border: none;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+    form button:hover {
+        background-color: #1d4ed8;
+    }
+
+    /* Opcional: un poco de espacio extra entre filtros */
+    form > div {
+        margin-bottom: 0.5rem;
+    }
+
+    @media (min-width: 768px) {
+        form > div {
+            margin-bottom: 0;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 140px;">
+    <div class="text-center mb-5">
+        <h2 class="text-primary fw-bold">Catálogo de productos</h2>
+        <p class="text-muted">Encuentra lo mejor en herramientas y en materiales para tus proyectos</p>
+    </div>
+
+    <!-- Filtro y búsqueda -->
+    <form method="get" class="row g-3 justify-content-center align-items-center mb-5">
+        <div class="col-md-4 col-sm-6">
+            <input type="text" name="q" class="form-control" placeholder="Buscar productos..." value="{{ query }}">
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <select name="category" class="form-select">
+                <option value="">Todas las categorías</option>
+                {% for cat in categories %}
+                <option value="{{ cat }}" {% if cat == category %}selected{% endif %}>{{ cat }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit">Filtrar</button>
+        </div>
+    </form>
+
+    <div class="row g-4 justify-content-center">
+        {% for product in products %}
+        <div class="col-md-4 col-sm-6">
+            <div class="card h-100 product-card">
+                <img src="{{ product.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title text-dark fw-semibold">{{ product.name }}</h5>
+                    <p class="card-text text-muted mb-1">Categoría: {{ product.category }}</p>
+                    <p class="card-text text-success fw-bold">{{ product.price|clp }}</p>
+                    {% if product.stock > 0 %}
+                    <span class="badge bg-success mb-2">Unidades disponibles</span>
+                    {% else %}
+                    <span class="badge bg-danger mb-2">Agotado</span>
+                    {% endif %}
+                    <a href="{% url 'store:product_detail' product.id %}" class="btn btn-outline-primary mt-auto">Ver detalle</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p class="text-muted fst-italic">No hay productos disponibles en este momento.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<!-- Aquí podrías agregar JS para filtros dinámicos si quieres -->
+{% endblock %}

@@ -20,3 +20,6 @@ Install dependecies:
 
 -- Django: "pip install django"
 -- Django-browser-reload: "pip install django-browser-reload"
+-- Django-Pillow: "pip install Pillow"
+-- Transbank SDK: "pip install transbank-sdk"
+-- Django tweaks: "pip install django-widget-tweaks"

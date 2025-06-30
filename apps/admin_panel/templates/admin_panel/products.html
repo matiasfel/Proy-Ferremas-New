@@ -1,0 +1,186 @@
+{% extends 'admin_panel/base.html' %}
+{% load static %}
+{% load clp_filters %}
+{% load humanize %}
+
+{% block title %} Productos {% endblock %}
+
+{% block admin_extracss %}
+<style>
+    .product-image {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
+    .table-hover tbody tr:hover {
+        background-color: #f5f7fa;
+    }
+    [data-bs-toggle="tooltip"] {
+        cursor: pointer;
+    }
+    .toast-container {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        z-index: 1080;
+    }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+<main class="col-md-10 ms-sm-auto p-0">
+    <div class="topbar d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h5 fw-semibold text-gray-800 mb-0">Gestión de Productos</h1>
+        <a href="{% url 'admin_panel:product_create' %}" class="btn btn-primary btn-sm">+ Nuevo Producto</a>
+    </div>
+
+    <div class="container-fluid py-2">
+        <form method="get" class="mb-3">
+            <div class="input-group">
+                <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Buscar por nombre o marca..." class="form-control form-control-sm" aria-label="Buscar productos">
+                <button type="submit" class="btn btn-outline-secondary btn-sm">Buscar</button>
+                {% if request.GET.q %}
+                <a href="{% url 'admin_panel:products' %}" class="btn btn-outline-danger btn-sm ms-1">Limpiar</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    <div class="container-fluid py-2">
+        <div class="card table-card shadow-sm rounded-3">
+            <div class="card-body p-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-semibold mb-0">Listado de productos ({{ products.paginator.count }})</h5>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0 text-center">
+                        <thead class="small text-muted text-uppercase">
+                            <tr>
+                                <th>IDX</th>
+                                <th>Imagen</th>
+                                <th>Nombre</th>
+                                <th>Marca</th>
+                                <th>Stock</th>
+                                <th>Precio</th>
+                                <th>Categoría</th>
+                                <th class="text-end">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if products %}
+                                {% for product in products %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            {% if product.image %}
+                                                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image" loading="lazy">
+                                            {% else %}
+                                                <span class="text-muted fst-italic">No imagen</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-start fw-semibold">{{ product.name }}</td>
+                                        <td>{{ product.brand.name|default:"-" }}</td>
+                                        <td>
+                                            {% if product.stock > 10 %}
+                                                <span class="badge bg-success" data-bs-toggle="tooltip" title="Stock suficiente">{{ product.stock }}</span>
+                                            {% elif product.stock > 0 %}
+                                                <span class="badge bg-warning text-dark" data-bs-toggle="tooltip" title="Stock bajo">{{ product.stock }}</span>
+                                            {% else %}
+                                                <span class="badge bg-danger" data-bs-toggle="tooltip" title="Sin stock">0</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if product.price %}
+                                                <span class="text-success fw-semibold">${{ product.price|floatformat:0|intcomma }}</span>
+                                            {% else %}
+                                                <span class="text-muted fst-italic">No definido</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ product.category.name|default:"-" }}</td>
+                                        <td class="text-end">
+                                            <form method="get" action="{% url 'admin_panel:product_edit' product.id %}" class="d-inline">
+                                                <button type="submit" class="btn btn-sm btn-outline-primary me-1">
+                                                    <i class="bi bi-pencil"></i> Editar
+                                                </button>
+                                            </form>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteProductModal{{ product.id }}">
+                                                <i class="bi bi-trash"></i> Eliminar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <div class="modal fade" id="deleteProductModal{{ product.id }}" tabindex="-1" aria-labelledby="deleteProductModalLabel{{ product.id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content border-0 shadow">
+                                                <div class="modal-header bg-danger text-white">
+                                                    <h5 class="modal-title" id="deleteProductModalLabel{{ product.id }}">Confirmar eliminación</h5>
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    ¿Estás seguro que deseas eliminar el producto <strong>{{ product.name }}</strong>?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form method="POST" action="{% url 'admin_panel:product_delete' product.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="8" class="text-center py-5">
+                                        <div class="text-muted">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="mb-2" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                            </svg>
+                                            <p class="mb-0">No hay productos registrados</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% if products.has_other_pages %}
+                <nav aria-label="Paginación productos" class="mt-3">
+                    <ul class="pagination justify-content-center mb-0">
+                        {% if products.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?q={{ request.GET.q }}&page={{ products.previous_page_number }}" aria-label="Anterior">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                        {% endif %}
+                        {% for num in products.paginator.page_range %}
+                            {% if products.number == num %}
+                                <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span></li>
+                            {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+                                <li class="page-item"><a class="page-link" href="?q={{ request.GET.q }}&page={{ num }}">{{ num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if products.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?q={{ request.GET.q }}&page={{ products.next_page_number }}" aria-label="Siguiente">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

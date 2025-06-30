@@ -26,6 +26,9 @@ urlpatterns = [
     # Roots URLs
     path("",                include(('apps.landing.urls', 'landing'),               namespace='landing')),
     path("authentication/", include(('apps.authentication.urls', 'authentication'), namespace='authentication')),
+    path("store/",          include(('apps.store.urls', 'store'),                   namespace='store')),
+    path("users/",          include(("apps.users.urls", "users"),                   namespace="users")),
+    path("admin_panel/",    include(("apps.admin_panel.urls", "admin_panel"),       namespace="admin_panel")),
     path("core/",           include(("apps.core.urls", "core"),                     namespace="core")),
 ]
 
@@ -35,3 +38,6 @@ if settings.DEBUG:
         path("__reload__/", include("django_browser_reload.urls")),
     ]
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    
+if settings.DEBUG and settings.MEDIA_URL:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
