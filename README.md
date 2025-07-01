@@ -60,7 +60,10 @@ MacOS: source venv/bin/activate
 Windows: cd venv/scripts/.activate
 ```
 
-- **Instala dependecias que estan en instructions.txt**
+- **Instala dependencias**
+```bash
+pip install -r requirements.txt
+```
 
 - **Aplica las migraciones**
 

@@ -16,11 +16,20 @@ Now, activate the enviroment:
 -- MacOS Terminal: "source venv/bin/activate"
 -- Windows Terminal: "cd venv/scripts/.activate"
 
-Install dependecies:
+Install dependencies:
 
--- Django: "pip install django"
--- Django-browser-reload: "pip install django-browser-reload"
--- Django-Pillow: "pip install Pillow"
--- Transbank SDK: "pip install transbank-sdk"
--- Django tweaks: "pip install django-widget-tweaks"
--- REST Framework: "pip install djangorestframework"
+-- pip install -r requirements.txt
+
+Create super user:
+
+-- py manage.py createsuperuser
+
+Make migrations
+
+-- py manage.py makemigrations
+
+Migrate
+
+-- py manage.py migrate
+
+Enjoy the app! :)
