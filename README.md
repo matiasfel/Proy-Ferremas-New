@@ -80,7 +80,7 @@ python manage.py createsuperuser
 - **Ejecuta el servidor**
 
 ```bash
-python manage.py runserver**
+python manage.py runserver
 ```
 
 ## 👥 Usuarios y Roles
